@@ -1,8 +1,16 @@
 import React from 'react';
+import DateRangeInput from './components/DateRangeInput';
+import TabControl from './components/UI/Tabs';
 
 function App() {
+
+  const handleRangeChanged = range => console.log(range);
+
   return (
-    <div>Hello World</div>
+    <div><p>Hello World</p>
+      <DateRangeInput onRangeChanged={handleRangeChanged} />
+      <TabControl tabs={["Tab 1", "Tab2"]}></TabControl>
+    </div>
   );
 }
 
