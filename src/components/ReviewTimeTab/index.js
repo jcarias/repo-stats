@@ -1,7 +1,8 @@
 import moment from 'moment';
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ResponsiveContainer, } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ResponsiveContainer, Label, } from 'recharts';
 import styled from 'styled-components';
+import CardKPI from '../CardKPI';
 
 
 const ReviewTimeTab = ({ data }) => {
@@ -12,20 +13,16 @@ const ReviewTimeTab = ({ data }) => {
       { date: v.date, "pr-review-time": +(v.values[0] || "").slice(0, -1), "pr-opened": v.values[1] || 0 }
     ))
 
-  const avgReviewTime = reviewTimeData.reduce((p, c) => (p + c["pr-review-time"]), 0) / reviewTimeData.length;
-
-
-
+  const avgReviewTime = reviewTimeData.reduce((p, c) => (p + (c["pr-review-time"] || 0)), 0) / reviewTimeData.length;
 
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active) {
-      console.log(payload);
       return (
         <ToolTipContainer>
           <span className="label">Review time</span>
           <span className="main">{moment.duration(payload[0].value, "seconds").humanize()}</span>
-          <span className="aux">{`${label} (${5} PRs)`}</span>
+          <span className="aux">{`${label} (${payload[0].payload["pr-opened"]} PRs)`}</span>
         </ToolTipContainer>
       );
     }
@@ -35,33 +32,52 @@ const ReviewTimeTab = ({ data }) => {
 
 
   return (
-    <div style={{ width: '100%', height: 300 }}>
-      <ResponsiveContainer>
-        <LineChart
+    <TabContainer>
 
-          data={reviewTimeData}
-          margin={{
-            top: 20, right: 50, left: 20, bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
+      <div style={{ width: '75%', height: '50vh' }}>
+        <ResponsiveContainer>
+          <LineChart
+            data={reviewTimeData}
+            margin={{
+              top: 20, right: 50, left: 20, bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis tick={false} >
+              <Label value="Review time" offset={5} position="top" />
+            </YAxis>
+            <Tooltip content={<CustomTooltip />} />
+            <ReferenceLine y={avgReviewTime} stroke="red" />
+            <Line type="monotone" dataKey="pr-review-time" stroke="#8884d8" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+      <CardKPI
+        title={"Average"}
+        color="red"
+        mainInfo={moment.duration(avgReviewTime, "seconds").humanize()}>
+        <span>{`(${Math.round(moment.duration(avgReviewTime, "seconds").asSeconds())} seconds)`}</span>
+      </CardKPI>
 
-          <YAxis axisLine />
-          <Tooltip content={<CustomTooltip />} />
-          <ReferenceLine y={avgReviewTime} stroke="red" />
-          <Line type="monotone" dataKey="pr-review-time" stroke="#8884d8" />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+
+
+    </TabContainer>
   );
 }
 
+const TabContainer = styled.div`
+display:flex;
+padding: 2em 3em;
+align-items: center;
+`
+
 
 const ToolTipContainer = styled.div`
-  background-color: rgba(255,255,255,0.9);
-  border: 1px solid whitesmoke;
+  background-color: rgba(255,255,255,0.95);
+  border-radius: 8px;
   padding: 1em;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
 
   .label, .main, .aux{
     display:block;
@@ -69,13 +85,13 @@ const ToolTipContainer = styled.div`
 
   .label{
     font-size: 0.75em;
-    opacity: 0.75;
+    opacity: 0.5;
   }
 
   .aux{
     margin-top: 1em;
     font-size: 0.8em;
-    opacity: 0.5;
+    opacity: 0.7;
   }
 
 `;
