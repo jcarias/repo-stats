@@ -1,16 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-
-
-const TabControl = ({ tabs }) => {
-  const [selTab, setSelTab] = useState(0)
-
-
-  const handleTabChange = newSelTabIndex => {
-    console.log(newSelTabIndex)
-    setSelTab(newSelTabIndex);
-  }
+const TabControl = ({ tabs, selTab, handleTabChange }) => {
 
   return (
     <TabsWrapper>
@@ -26,6 +17,8 @@ const TabControl = ({ tabs }) => {
 const TabsWrapper = styled.div`
   display: flex;
   border-bottom: 1px solid gray;
+  justify-content: center;
+  margin-top: 5em;
 
    & > *+*{
      margin-left: 1em;

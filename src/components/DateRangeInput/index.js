@@ -17,10 +17,9 @@ const DateRangeInput = ({ onRangeChanged }) => {
 
     var maxEndDate = moment(newStartDate).add(3, 'M');
     if (moment(endDate).isAfter(maxEndDate))
-      setEndDate(maxEndDate).toDate();
+      setEndDate(maxEndDate.toDate());
 
     onRangeChanged({ startDate, endDate });
-
   }
 
   const updateEndDate = newEndDate => {
