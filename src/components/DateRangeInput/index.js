@@ -8,7 +8,7 @@ const DateRangeInput = ({ onRangeChanged }) => {
 
   const defaultDateFormat = "yyyy/MM/dd"
 
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(moment(new Date()).subtract(2, "months").toDate());
   const [endDate, setEndDate] = useState(new Date());
 
 

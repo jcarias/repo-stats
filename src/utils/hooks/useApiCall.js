@@ -8,7 +8,8 @@ export const useApiCall = (url, options) => {
   const localOptions = JSON.stringify(options);
 
   useEffect(() => {
-
+    setError(null);
+    setData(null);
     setLoading(true);
     fetch(url, JSON.parse(localOptions))
       .then(res => {
