@@ -2,7 +2,10 @@ import React from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
 } from 'recharts';
+import styled from 'styled-components';
+import { colors } from '../../../utils/AppTheme';
 import { subStringAfterChar } from '../../../utils/StringUtils';
+import CardKPI from '../../CardKPI';
 import { TabContainer } from '../../UI/TabContainer';
 import OpenPRChartTooltip from './OpenPRChartTooltip';
 
@@ -11,6 +14,8 @@ const getColor = (index, numberOfRepos) => `hsl(${(360 / numberOfRepos) * index}
 
 
 const OpenPRTab = ({ data }) => {
+
+  // Extract chart data from API returned data
   const chartData = data.calculated.filter(c => c.granularity === "all" && c.for.repositories.length === 1).map(v => (
     {
       repository: v.for.repositories[0],
@@ -19,14 +24,18 @@ const OpenPRTab = ({ data }) => {
     }
   ));
 
+  // Compute average PRs/Repo
+  const avgPRsByRepo = +(chartData.reduce((prev, curr) => prev + curr["pr-opened"], 0) / chartData.length).toFixed(2);
+
+
   return (
     <TabContainer>
-      <div style={{ width: '75%', height: '50vh' }}>
+      <div style={{ width: '75%', height: '65vh' }}>
         <ResponsiveContainer>
           <BarChart
             data={chartData}
             margin={{
-              top: 35, right: 30, left: 60, bottom: 50,
+              top: 35, right: 50, left: 60, bottom: 50,
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
@@ -46,10 +55,24 @@ const OpenPRTab = ({ data }) => {
           </BarChart>
         </ResponsiveContainer>
       </div>
+      <CardKPI
+        title={"Average"}
+        color={colors.defaultPrimaryColor}
+        mainInfo={<MainKPIInfo>{avgPRsByRepo} <span>PRs/day</span></MainKPIInfo>}>
+      </CardKPI>
     </TabContainer>
   );
 }
 
+
+const MainKPIInfo = styled.div`
+  font-size: 2rem;
+  font-weight: 500;
+  span{
+    font-size: 1rem;
+    font-weight: 300;
+  }
+`;
 
 
 
