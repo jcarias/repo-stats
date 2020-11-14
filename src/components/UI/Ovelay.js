@@ -20,6 +20,8 @@ const OverlayPanel = styled.div`
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
+  z-index:100;
+  color: white;
 
   &>*{
     margin: 1em;

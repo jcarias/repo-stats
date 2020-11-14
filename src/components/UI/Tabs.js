@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { colors } from '../../utils/AppTheme';
 
 const TabControl = ({ tabs, selTab, handleTabChange }) => {
 
@@ -16,9 +17,9 @@ const TabControl = ({ tabs, selTab, handleTabChange }) => {
 
 const TabsWrapper = styled.div`
   display: flex;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid ${colors.dividerColor};
   justify-content: center;
-  margin-top: 5em;
+  margin-top: 3em;
 
    & > *+*{
      margin-left: 1em;
@@ -27,12 +28,14 @@ const TabsWrapper = styled.div`
 
 const Tab = styled.a`
   display: flex;
-  border: 1px solid gray;
+  border: 1px solid  ${colors.dividerColor};
   border-bottom: none;
-  padding: 1em 2em;
+  padding: 0.5em 2em;
   transition: all 200ms ease-out;
   border-radius: 8px 8px 0 0;
   background-color: whitesmoke;
+  font-size: 1.25em;
+  color: ${colors.secondaryTextColor};
 
   &:hover{
     background-color: white;
@@ -43,6 +46,7 @@ const Tab = styled.a`
   &.selected{
     background-color: white;
     transform: translateY(1px);
+    color: ${colors.darkPrimaryColor};
   }
 `
 

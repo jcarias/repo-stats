@@ -30,7 +30,7 @@ const OpenPRTab = ({ data }) => {
 
   return (
     <TabContainer>
-      <div style={{ width: '75%', height: '65vh' }}>
+      <div style={{ width: '75%', height: '53vh' }}>
         <ResponsiveContainer>
           <BarChart
             data={chartData}
@@ -43,7 +43,7 @@ const OpenPRTab = ({ data }) => {
             <XAxis dataKey="repository"
               label={{ value: 'Repositories', position: 'insideBottom', offset: -35 }}
               tickFormatter={(v) => subStringAfterChar(v, "/")} />
-            <Tooltip content={<OpenPRChartTooltip />} cursor={{ fill: 'transparent' }} />
+            <Tooltip content={<OpenPRChartTooltip />} cursor={{ fill: colors.lightPrimaryColorFade }} />
             <Bar dataKey="pr-opened" >
               {
                 chartData.map((entry, index) => (

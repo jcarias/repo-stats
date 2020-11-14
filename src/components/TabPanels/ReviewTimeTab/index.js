@@ -1,6 +1,7 @@
 import moment from 'moment';
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ResponsiveContainer } from 'recharts';
+import { colors } from '../../../utils/AppTheme';
 import CardKPI from '../../CardKPI';
 import { TabContainer } from '../../UI/TabContainer';
 import CustomTooltip from './Tooltip';
@@ -26,7 +27,7 @@ const ReviewTimeTab = ({ data }) => {
 
   return (
     <TabContainer>
-      <div style={{ width: '75%', height: '65vh' }}>
+      <div style={{ width: '75%', height: '53vh' }}>
         <ResponsiveContainer>
           <LineChart
             data={reviewTimeData}
@@ -38,14 +39,14 @@ const ReviewTimeTab = ({ data }) => {
             <XAxis dataKey="date" angle={-75} tickMargin={50} tickFormatter={dateTickFormatter} />
             <YAxis label={{ value: 'Review Time', position: 'top', offset: 20 }} tickFormatter={timeTickFormatter} />
             <Tooltip content={<CustomTooltip />} />
-            <ReferenceLine y={avgReviewTime} stroke="red" />
-            <Line type="monotone" dataKey="pr-review-time" stroke="#8884d8" />
+            <ReferenceLine y={avgReviewTime} stroke={colors.accentColor} />
+            <Line type="monotone" dataKey="pr-review-time" stroke={colors.defaultPrimaryColor} />
           </LineChart>
         </ResponsiveContainer>
       </div>
       <CardKPI
         title={"Average"}
-        color="red"
+        color={colors.accentColor}
         mainInfo={moment.duration(avgReviewTime, "seconds").humanize()}>
         <span>{`(${Math.round(moment.duration(avgReviewTime, "seconds").asSeconds())} seconds)`}</span>
       </CardKPI>

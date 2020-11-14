@@ -3,6 +3,8 @@ body {
   font-family: "Manrope", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: hsl(200, 80%, 98%);
+  color: #212121;
 }
 
 code {
