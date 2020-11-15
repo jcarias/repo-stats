@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { colors } from '../../../utils/AppTheme';
 
@@ -14,6 +15,12 @@ const OpenPRChartTooltip = ({ active, payload, label }) => {
 
   return null;
 };
+
+OpenPRChartTooltip.propTypes = {
+  active: PropTypes.bool,
+  payload: PropTypes.array,
+  label: PropTypes.string
+}
 
 const ToolTipContainer = styled.div`
   background-color: rgba(255,255,255,0.95);

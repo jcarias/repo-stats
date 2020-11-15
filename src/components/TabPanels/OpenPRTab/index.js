@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
 } from 'recharts';
@@ -62,6 +63,10 @@ const OpenPRTab = ({ data }) => {
       </CardKPI>
     </TabContainer>
   );
+}
+
+OpenPRTab.propTypes = {
+  data: PropTypes.object.isRequired
 }
 
 

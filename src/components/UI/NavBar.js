@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { colors } from '../../utils/AppTheme';
 import { BarChart2 } from "react-feather"
@@ -10,6 +11,11 @@ const NavBar = ({ title, children }) => {
       {children && <NavItems>{children}</NavItems>}
     </NavContainer>
   );
+}
+
+NavBar.propTypes = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node,
 }
 
 const NavContainer = styled.nav`

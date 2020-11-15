@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from "prop-types";
 import styled from 'styled-components';
 
 const CardKPI = ({ color = "inherit", title, mainInfo, children }) => {
@@ -11,6 +12,16 @@ const CardKPI = ({ color = "inherit", title, mainInfo, children }) => {
       </KpiContents>
     </KpiContainer>
   );
+}
+
+CardKPI.propTypes = {
+  /**
+   * A CSS Valid color value
+   */
+  color: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  mainInfo: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+  children: PropTypes.node
 }
 
 const KpiContainer = styled.div`

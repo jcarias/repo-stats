@@ -33,7 +33,8 @@
     ],
     "rules": {
       "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn"
+      "react-hooks/exhaustive-deps": "warn",
+      "react/prop-types": "warn"
     }
   },
   "browserslist": {
@@ -47,5 +48,21 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "endOfLine": "lf",
+    "jsxBracketSameLine": true,
+    "jsxSingleQuote": false,
+    "printWidth": 100,
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "all",
+    "useTabs": false
+  },
+  "devDependencies": {
+    "prettier": "^2.1.2"
   }
 }

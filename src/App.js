@@ -68,7 +68,6 @@ function App() {
     ...options,
     body: JSON.stringify({ ...defaultRequestBody, "date_from": dateRangeFilter.startDate, "date_to": dateRangeFilter.endDate })
   });
-  console.log(dateRangeFilter);
 
   return (
     <div>

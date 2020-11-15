@@ -1,13 +1,15 @@
-import moment from 'moment';
 import React from 'react';
+import moment from 'moment';
+import PropTypes from 'prop-types';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ResponsiveContainer } from 'recharts';
 import { colors } from '../../../utils/AppTheme';
 import CardKPI from '../../CardKPI';
 import { TabContainer } from '../../UI/TabContainer';
-import CustomTooltip from './Tooltip';
+import CustomTooltip from "./Tooltip";
+import { getHumanDuration } from '../../../utils/StringUtils';
 
 const dateTickFormatter = dateStr => moment(dateStr).format("MMM D");
-const timeTickFormatter = seconds => moment.duration(seconds, "seconds").humanize();
+const timeTickFormatter = seconds => moment.duration(seconds, "seconds").asHours().toFixed(0);
 
 const ReviewTimeTab = ({ data }) => {
 
@@ -32,22 +34,22 @@ const ReviewTimeTab = ({ data }) => {
           <LineChart
             data={reviewTimeData}
             margin={{
-              top: 35, right: 50, left: 40, bottom: 75,
+              top: 35, right: 50, left: 50, bottom: 75,
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" angle={-75} tickMargin={50} tickFormatter={dateTickFormatter} />
-            <YAxis label={{ value: 'Review Time', position: 'top', offset: 20 }} tickFormatter={timeTickFormatter} />
-            <Tooltip content={<CustomTooltip />} />
+            <XAxis dataKey="date" angle={-75} tickMargin={25} tickFormatter={dateTickFormatter} />
+            <YAxis label={{ value: 'Review Time (Hours)', position: 'top', offset: 20 }} tickFormatter={timeTickFormatter} />
+            <Tooltip content={<CustomTooltip />} cursor={{ stroke: colors.lightPrimaryColorFade, strokeWidth: 3 }} />
             <ReferenceLine y={avgReviewTime} stroke={colors.accentColor} />
             <Line type="monotone" dataKey="pr-review-time" stroke={colors.defaultPrimaryColor} />
           </LineChart>
         </ResponsiveContainer>
       </div>
       <CardKPI
-        title={"Average"}
+        title={"Average Review Time"}
         color={colors.accentColor}
-        mainInfo={moment.duration(avgReviewTime, "seconds").humanize()}>
+        mainInfo={`${getHumanDuration(avgReviewTime)}`}>
         <span>{`(${Math.round(moment.duration(avgReviewTime, "seconds").asSeconds())} seconds)`}</span>
       </CardKPI>
 
@@ -55,6 +57,9 @@ const ReviewTimeTab = ({ data }) => {
   );
 }
 
+ReviewTimeTab.propTypes = {
+  data: PropTypes.object.isRequired
+}
 
 
 export default ReviewTimeTab;

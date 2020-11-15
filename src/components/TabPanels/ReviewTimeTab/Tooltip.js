@@ -1,7 +1,8 @@
 import React from 'react';
-import moment from 'moment';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { colors } from '../../../utils/AppTheme';
+import { getHumanDuration } from '../../../utils/StringUtils';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active) {
@@ -10,7 +11,7 @@ const CustomTooltip = ({ active, payload, label }) => {
         <div className="top-section">
           <div>
             <span className="label">Review time</span>
-            <span className="main">{moment.duration(payload[0].value, "seconds").humanize()}</span>
+            <span className="main">{getHumanDuration(payload[0].value)}</span>
           </div>
           <div className="counter">
             {`${payload[0].payload["pr-opened"]} PRs`}
@@ -23,6 +24,12 @@ const CustomTooltip = ({ active, payload, label }) => {
 
   return null;
 };
+
+CustomTooltip.propTypes = {
+  active: PropTypes.bool,
+  payload: PropTypes.array,
+  label: PropTypes.string
+}
 
 export default CustomTooltip;
 
@@ -58,7 +65,7 @@ const ToolTipContainer = styled.div`
       padding: 0.5em 1em;
       margin-left: 3em;
       border-radius: 4px;
-      color: ${colors.secondaryTextColor};
+      color: ${colors.textPrimaryColor};
       flex: 0;
       white-space:nowrap;
     }

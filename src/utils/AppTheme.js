@@ -7,6 +7,8 @@ export const colors = {
   accentColor: "#E040FB",
   primaryTextColor: "#212121",
   secondaryTextColor: "#757575",
-  dividerColor: "#BDBDBD"
+  dividerColor: "#BDBDBD",
+
+  backgroundColor: "hsl(200 80% 95% / 1)"
 }
 

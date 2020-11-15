@@ -18,10 +18,14 @@ const DateRangeInput = ({ onRangeChanged }) => {
     setStartDate(newStartDate);
 
     var maxEndDate = moment(newStartDate).add(3, 'M');
+
     if (moment(endDate).isAfter(maxEndDate))
       setEndDate(maxEndDate.toDate());
 
-    onRangeChanged({ startDate: newStartDate, endDate });
+    if (moment(newStartDate).isValid()) {
+      onRangeChanged({ startDate: newStartDate, endDate });
+    }
+
   }
 
   const updateEndDate = newEndDate => {
@@ -31,11 +35,13 @@ const DateRangeInput = ({ onRangeChanged }) => {
     if (moment(startDate).isBefore(maxStartDate))
       setStartDate(maxStartDate.toDate());
 
-    onRangeChanged({ startDate, endDate: newEndDate });
+    if (moment(newEndDate).isValid()) {
+      onRangeChanged({ startDate, endDate: newEndDate });
+    }
   }
 
 
-  const rangeValue = moment.duration(moment(startDate).diff(moment(endDate), "ms")).humanize();
+  const rangeValue = Math.abs(moment.duration(moment(startDate).diff(moment(endDate), "ms")).asDays()).toFixed(0);
 
   return (
     <Wrapper>
@@ -44,7 +50,7 @@ const DateRangeInput = ({ onRangeChanged }) => {
 
         <Title>
           <span> Search Range</span>
-          <span className="max-range">Max range span of 3 months</span>
+          <span className="max-range">Change the dates to update display.</span>
         </Title>
 
         <FieldsContainer>
@@ -52,11 +58,13 @@ const DateRangeInput = ({ onRangeChanged }) => {
             <label>From</label>
             <DatePicker
               selected={startDate}
-              onChange={date => updateStartDate(date)}
+              onChange={(date) => updateStartDate(date)}
               selectsStart
               startDate={startDate}
               endDate={endDate}
+              maxDate={endDate}
               dateFormat={defaultDateFormat}
+              className={`${moment(startDate).isValid() ? "" : "invalid-value"}`}
             />
           </Field>
 
@@ -70,11 +78,12 @@ const DateRangeInput = ({ onRangeChanged }) => {
               endDate={endDate}
               minDate={startDate}
               dateFormat={defaultDateFormat}
+              className={`${moment(endDate).isValid() ? "" : "invalid-value"}`}
             />
           </Field>
         </FieldsContainer >
 
-        <SelectedRangeInfo>Current range span: <span className="sel-range">{rangeValue}</span> (aprox.)</SelectedRangeInfo>
+        <SelectedRangeInfo>Current range span: <span className="sel-range">{isNaN(rangeValue) ? "Invalid range" : `${rangeValue} days`}</span> (Max range span of 3 months)</SelectedRangeInfo>
       </RangeContainer>
     </Wrapper>
   );
@@ -88,7 +97,8 @@ DateRangeInput.propTypes = {
 const Wrapper = styled.div`
   display:flex;
   justify-content:center;
-  margin-top: 2em;
+  padding-top: 2em;
+  background-color: ${colors.backgroundColor};
 
   .react-datepicker{
     font-family: 'Manrope';
@@ -139,7 +149,7 @@ const FieldsContainer = styled.div`
 
 
 const Field = styled.div`
-display: flex;
+    display: flex;
     align-items: baseline;
 
     input{
@@ -149,6 +159,10 @@ display: flex;
       border-radius: 4px;
       font-family: "Manrope", sans-serif;
       font-weight: 500;
+    }
+    .invalid-value{
+      border-color: red;
+      box-shadow: inset 0 0px 4px 0px red;
     }
 `;
 

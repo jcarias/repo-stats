@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Overlay = ({ children }) => {
@@ -7,6 +8,10 @@ const Overlay = ({ children }) => {
       {children}
     </OverlayPanel>
   );
+}
+
+Overlay.propTypes = {
+  children: PropTypes.node,
 }
 
 const OverlayPanel = styled.div`
