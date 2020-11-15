@@ -1,8 +1,11 @@
+import Tippy from '@tippyjs/react/headless';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import { Info } from 'react-feather';
+
 import styled from 'styled-components';
 import { colors } from '../../utils/AppTheme';
 
@@ -40,8 +43,8 @@ const DateRangeInput = ({ onRangeChanged }) => {
     }
   }
 
-
   const rangeValue = Math.abs(moment.duration(moment(startDate).diff(moment(endDate), "ms")).asDays()).toFixed(0);
+
 
   return (
     <Wrapper>
@@ -50,7 +53,7 @@ const DateRangeInput = ({ onRangeChanged }) => {
 
         <Title>
           <span> Search Range</span>
-          <span className="max-range">Change the dates to update display.</span>
+          <SelectedRangeInfo>Current range span: <span className="sel-range">{isNaN(rangeValue) ? "Invalid range" : `${rangeValue} days`}</span></SelectedRangeInfo>
         </Title>
 
         <FieldsContainer>
@@ -82,8 +85,19 @@ const DateRangeInput = ({ onRangeChanged }) => {
             />
           </Field>
         </FieldsContainer >
+        <div className="helper-info">
+          <span>Change the dates to update display.</span>
+          <Tippy inertia inlinePositioning render={attrs => (
+            <div className="tooltip" {...attrs}><strong>Note:</strong> the dates will adjust automatically to cover a <strong>maximum range of 3 months.</strong></div>
+          )}>
 
-        <SelectedRangeInfo>Current range span: <span className="sel-range">{isNaN(rangeValue) ? "Invalid range" : `${rangeValue} days`}</span> (Max range span of 3 months)</SelectedRangeInfo>
+            <Info color={colors.accentColor} size={"1.5em"} />
+          </Tippy>
+
+
+
+        </div>
+
       </RangeContainer>
     </Wrapper>
   );
@@ -108,7 +122,13 @@ const RangeContainer = styled.div`
   display:flex;
   flex-direction: column;
   margin: auto;
-  
+  div.helper-info{
+    display: flex;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #757575;
+    max-width: 480px;
+  }
 `;
 
 const Title = styled.div`
@@ -119,12 +139,6 @@ const Title = styled.div`
   font-weight:500;
   border-bottom: 1px solid ${colors.dividerColor};
   padding-bottom: 0.5rem;
-
-  span.max-range{
-    font-size: 0.8rem;
-    font-weight:400;
-    color: ${colors.secondaryTextColor};
-  }
 
   `;
 

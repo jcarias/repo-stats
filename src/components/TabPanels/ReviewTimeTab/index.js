@@ -19,13 +19,16 @@ const ReviewTimeTab = ({ data }) => {
       {
         date: v.date,
         "pr-review-time": +(v.values[0] || "").slice(0, -1),
-        "pr-opened": v.values[1] || 0
+        "pr-opened": v.values[1] || 0,
+        reviewTimeByPr: +(v.values[0] || "").slice(0, -1) / (v.values[1] || 1),
       }
     ));
 
   // Compute Review time average
   const avgReviewTime = reviewTimeData.reduce((p, c) => (p + (c["pr-review-time"] || 0)), 0) / reviewTimeData.length;
 
+  // Compute average review time / PR
+  const avgReviewTimeByPR = avgReviewTime / reviewTimeData.reduce((p, c) => (p + (c["pr-opened"] || 0)), 0);
 
   return (
     <TabContainer>
@@ -50,7 +53,7 @@ const ReviewTimeTab = ({ data }) => {
         title={"Average Review Time"}
         color={colors.accentColor}
         mainInfo={`${getHumanDuration(avgReviewTime)}`}>
-        <span>{`(${Math.round(moment.duration(avgReviewTime, "seconds").asSeconds())} seconds)`}</span>
+        <span>{`(about ${moment.duration(avgReviewTimeByPR, "seconds").humanize()} / PR)`}</span>
       </CardKPI>
 
     </TabContainer>

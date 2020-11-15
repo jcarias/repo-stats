@@ -25,9 +25,15 @@ const OpenPRTab = ({ data }) => {
     }
   ));
 
-  // Compute average PRs/Repo
-  const avgPRsByRepo = +(chartData.reduce((prev, curr) => prev + curr["pr-opened"], 0) / chartData.length).toFixed(2);
 
+  const totalDays = data.calculated.filter(c => c.granularity === "day" && c.for.repositories.length > 1)[0].values.length;
+  const totalPRs = chartData.reduce((prev, curr) => prev + curr["pr-opened"], 0);
+
+  // Compute average PRs/day
+  const avgPRsByDay = +(totalPRs / totalDays).toFixed(2);
+
+  // Compute average PRs/repo
+  const avgPRsByRepo = +(totalPRs / chartData.length).toFixed(2);
 
   return (
     <TabContainer>
@@ -59,7 +65,8 @@ const OpenPRTab = ({ data }) => {
       <CardKPI
         title={"Average"}
         color={colors.defaultPrimaryColor}
-        mainInfo={<MainKPIInfo>{avgPRsByRepo} <span>PRs/day</span></MainKPIInfo>}>
+        mainInfo={<MainKPIInfo>{avgPRsByDay} <span>PR/day</span></MainKPIInfo>}>
+        <div>{`${avgPRsByRepo} PR/Repo`}</div>
       </CardKPI>
     </TabContainer>
   );
