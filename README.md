@@ -114,3 +114,20 @@ I've chosen the **second approach** because it would allow the API to shine! Tak
 The `for` is being requested 2 different sets: one with separate data for each repo, and the other with all repos info joined together.
 
 There is also needed to specify the `granularities`. These will allow to get the data aggregated and also split by days.
+
+### Tab Manager
+
+There are a two main view in the App: The Review Time and the PR Created. The user can swap between by choosing the one tab. These tabs are managed via a selection made in the `Tab` (dumb) component, and it's parent is responsible to show panel corresponding to the specific tab.\
+This is very simple and unscalable solution, and it is one of the front runners for refactoring into a more robust, scalable and reusable solution...
+
+I also considered using [React Router](https://reactrouter.com/) to choose the tab being displayed but, given the scope of this app, this might have been an overkill.
+
+## Possible Future improvements
+
+Here are some of the next improvements that might be considered:
+
+- A more robust and cleaner approach to parse data coming from the API into the charts. The current solution is too depending on the data being returned from this specific request object. Also is not very readable and it's performance is not remarkable as well.
+- Add internationalization. Currently all strings and formats are hardcoded in english.
+- A better tab manager. This new manager would be configurable to have a variable amount of tabs, and the tabs data should contain all the meta-data necessary to render the tabs.
+- More features.
+- Using Typescript (TS). The current simplicity of the application would not benefit from using TS instead of JS. The additional effort needed to setup types plus some potential issues with the libraries used would render the long term benefits a bit pointless.
