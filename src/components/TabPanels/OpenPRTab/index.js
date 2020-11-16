@@ -37,7 +37,7 @@ const OpenPRTab = ({ data }) => {
 
   return (
     <TabContainer>
-      <div style={{ width: '75%', height: '53vh' }}>
+      <div style={{ width: '75%', height: 'calc(100vh - 360px)' }}>
         <ResponsiveContainer>
           <BarChart
             data={chartData}
@@ -54,7 +54,7 @@ const OpenPRTab = ({ data }) => {
             <Bar dataKey="pr-opened" >
               {
                 chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={getColor(index, 4)} />
+                  <Cell key={`cell-${index}`} fill={getColor(index, chartData.length)} />
                 ))
               }
             </Bar>

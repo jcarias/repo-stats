@@ -5,6 +5,7 @@ import { colors } from '../../../utils/AppTheme';
 
 const OpenPRChartTooltip = ({ active, payload, label }) => {
   if (active) {
+
     return (
       <ToolTipContainer>
         <span className="main">{payload[0].value}<span>Pull Requests</span></span>

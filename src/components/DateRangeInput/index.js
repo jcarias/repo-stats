@@ -85,17 +85,14 @@ const DateRangeInput = ({ onRangeChanged }) => {
             />
           </Field>
         </FieldsContainer >
+
         <div className="helper-info">
           <span>Change the dates to update display.</span>
-          <Tippy inertia inlinePositioning render={attrs => (
+          <Tippy inertia render={attrs => (
             <div className="tooltip" {...attrs}><strong>Note:</strong> the dates will adjust automatically to cover a <strong>maximum range of 3 months.</strong></div>
           )}>
-
             <Info color={colors.accentColor} size={"1.5em"} />
           </Tippy>
-
-
-
         </div>
 
       </RangeContainer>
@@ -111,7 +108,7 @@ DateRangeInput.propTypes = {
 const Wrapper = styled.div`
   display:flex;
   justify-content:center;
-  padding-top: 2em;
+  padding-top: 1em;
   background-color: ${colors.backgroundColor};
 
   .react-datepicker{
@@ -128,6 +125,10 @@ const RangeContainer = styled.div`
     font-weight: 500;
     color: #757575;
     max-width: 480px;
+
+    &>*+*{
+      margin-left: 1em;
+    }
   }
 `;
 

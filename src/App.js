@@ -13,46 +13,6 @@ import styled from 'styled-components';
 import Loader from './components/UI/Loader';
 
 
-const options = {
-  method: 'POST',
-  mode: 'cors',
-  cache: 'default',
-};
-
-const defaultRequestBody = {
-  "for": [
-    {
-      "repositories": [
-        "github.com/athenianco/athenian-api",
-        "github.com/athenianco/athenian-webapp",
-        "github.com/athenianco/infrastructure",
-        "github.com/athenianco/metadata"
-      ],
-      "repogroups": [[0], [1], [2], [3]]
-    }, {
-      "repositories": [
-        "github.com/athenianco/athenian-api",
-        "github.com/athenianco/athenian-webapp",
-        "github.com/athenianco/infrastructure",
-        "github.com/athenianco/metadata"
-      ]
-    }
-  ],
-  "metrics": [
-    "pr-review-time",
-    "pr-opened"
-  ],
-  "date_from": "2020-06-01",
-  "date_to": "2020-09-01",
-  "granularities": [
-    "all",
-    "day"
-  ],
-  "exclude_inactive": true,
-  "account": 1,
-  "timezone": 60
-
-};
 
 
 function App() {
@@ -64,10 +24,7 @@ function App() {
   );
   const [selTab, setSelTab] = useState(0)
 
-  const { data, error, loading } = useApiCall('https://api.athenian.co/v1/metrics/prs', {
-    ...options,
-    body: JSON.stringify({ ...defaultRequestBody, "date_from": dateRangeFilter.startDate, "date_to": dateRangeFilter.endDate })
-  });
+  const { data, error, loading } = useApiCall(dateRangeFilter.startDate.getTime(), dateRangeFilter.endDate.getTime());
 
   return (
     <div>
@@ -83,7 +40,12 @@ function App() {
             <Loader size={64} />
           </Overlay>
         )}
-        {error && <div>Oops! something went wrong...</div>}
+        {error && (
+          <div className="error">
+            <div>Oops! something went wrong...</div>
+            <span className="help-message">Please check you internet connection. If your connection is ok, please try again later.</span>
+          </div>
+        )}
         {data && selTab === 0 && <div><ReviewTimeTab data={data}></ReviewTimeTab></div>}
         {data && selTab === 1 && <div><OpenPRTab data={data}></OpenPRTab></div>}
       </TabPanel>
@@ -95,6 +57,17 @@ const TabPanel = styled.div`
   background-color: white;
   .loading{
     filter: blur(3px);
+  }
+
+  .error{
+    margin: 3em auto;
+    color: hsl(0deg 50% 50%);
+    max-width: 50%;
+    .help-message{
+      font-size: 0.8em;
+      font-weight: 500;
+      color: ${colors.secondaryTextColor};
+    }
   }
 `;
 

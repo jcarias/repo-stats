@@ -21,7 +21,7 @@ const TabsWrapper = styled.div`
   display: flex;
   border-bottom: 1px solid ${colors.dividerColor};
   justify-content: center;
-  padding-top: 3em;
+  padding-top: 2em;
    background-color: ${colors.backgroundColor};
 
    & > *+*{

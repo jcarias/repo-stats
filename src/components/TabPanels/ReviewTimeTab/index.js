@@ -32,7 +32,7 @@ const ReviewTimeTab = ({ data }) => {
 
   return (
     <TabContainer>
-      <div style={{ width: '75%', height: '53vh' }}>
+      <div style={{ width: '75%', height: 'calc(100vh - 360px)' }}>
         <ResponsiveContainer>
           <LineChart
             data={reviewTimeData}
@@ -55,8 +55,8 @@ const ReviewTimeTab = ({ data }) => {
         mainInfo={`${getHumanDuration(avgReviewTime)}`}>
         <span>{`(about ${moment.duration(avgReviewTimeByPR, "seconds").humanize()} / PR)`}</span>
       </CardKPI>
-
     </TabContainer>
+
   );
 }
 

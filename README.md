@@ -1,70 +1,116 @@
-# Getting Started with Create React App
+# Repo Stats
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## About
 
-## Available Scripts
+This project is a demo of a data visualization App of a couple of Pull Request metrics, over a time span chosen by the user. The data is provided by the Athenian API.
 
-In the project directory, you can run:
+This project uses react and was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-### `yarn start`
+## Pre-Requisites
 
-Runs the app in the development mode.\
+- [NodeJS](https://nodejs.org/en/)
+
+## Install & run
+
+Clone this repo. If you are able, you use your terminal like this:
+
+```shell
+$ git clone https://github.com/jcarias/repo-stats
+```
+
+After cloning to code, it is time to install the project's dependencies. Move into the cloned project folder and type:
+
+```shell
+$ yarn
+```
+
+Once the install process completes, you can run the app:
+
+```shell
+$ yarn start
+```
+
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Libraries
 
-### `yarn test`
+The project used a few libraries to leverage the development. Here are some of the outstanding ones:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- ["recharts"](https://recharts.org/en-US/): The library used to provide the charts for the data visualization. This library was chosen mainly due to prior experience with it.
+- ["react-datepicker"](https://reactdatepicker.com/): Date picker components.
+- ["moment"](https://momentjs.com/): Do date and time calculations and formatting.
+- ["styled-components"](https://styled-components.com/): the main styling solution of the app.
+- ["@tippyjs/react"](https://github.com/atomiks/tippyjs-react): Used to present customized tooltips.
+- ["react-feather"](https://github.com/feathericons/react-feather): Open source icons used in the app.
 
-### `yarn build`
+## Outstanding Implementation Notes
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### API Calls
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The API is called automatically when the app launches or dates range is changed. The call is made through the [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) using the `useEffect` hook.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The logic to fetch the data is wrapped inside a custom hook [`useApiCall`](https://github.com/jcarias/repo-stats/blob/main/src/utils/hooks/useApiCall.js). The hook is set up with a two arguments (`startDate`and `endDate`) and it provides an object containing the following to the client component:
 
-### `yarn eject`
+- `isLoading`: a boolean flag indicating if the request is running.
+- `error`: an object containing the error information. (`null` if no errors exist).
+- `data`: an object containing the response from the API (`null` if no data has been returned of if it is still loading).
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Usage example:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```javascript
+// (...)
+const { data, error, loading } = useApiCall(new Date().getTime(), new Date().getTime());
+// (...)
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### Request Object
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+This App has a couple of charts. In one of them (**Review Time**) it's needed the aggregated data of all the repos over a span of time. For the other (**PRs Opened**) the data needs to be aggregated in time be split by repo. To solve this there were 3 ways:
 
-## Learn More
+1. Send 2 separate calls to get the data needed for each chart.
+2. Combine all the needs into the request object.
+3. One call to get all the data with a minimal level of aggregation. Then the aggregation could be done in the client.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+All have advantages and drawbacks.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+I've chosen the **second approach** because it would allow the API to shine! Take a look at the request object:
 
-### Code Splitting
+```JSON
+{
+  "for": [
+    {
+      "repositories": [
+        "github.com/athenianco/athenian-api",
+        "github.com/athenianco/athenian-webapp",
+        "github.com/athenianco/infrastructure",
+        "github.com/athenianco/metadata"
+      ],
+      "repogroups": [[0], [1], [2], [3]]
+    }, {
+      "repositories": [
+        "github.com/athenianco/athenian-api",
+        "github.com/athenianco/athenian-webapp",
+        "github.com/athenianco/infrastructure",
+        "github.com/athenianco/metadata"
+      ]
+    }
+  ],
+  "metrics": [
+    "pr-review-time",
+    "pr-opened"
+  ],
+  "date_from": "2020-06-01",
+  "date_to": "2020-09-01",
+  "granularities": [
+    "all",
+    "day"
+  ],
+  "exclude_inactive": true,
+  "account": 1,
+  "timezone": 60
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+The `for` is being requested 2 different sets: one with separate data for each repo, and the other with all repos info joined together.
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+There is also needed to specify the `granularities`. These will allow to get the data aggregated and also split by days.
