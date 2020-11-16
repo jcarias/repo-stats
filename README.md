@@ -45,6 +45,10 @@ The project used a few libraries to leverage the development. Here are some of t
 
 ## Outstanding Implementation Notes
 
+### Technologies Used
+
+This is app was made using React 17 and relied on functional components exclusively.
+
 ### API Calls
 
 The API is called automatically when the app launches or dates range is changed. The call is made through the [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) using the `useEffect` hook.
